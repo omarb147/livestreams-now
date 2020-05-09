@@ -3,7 +3,7 @@ const headers = require("./utils/headers");
 
 exports.handler = async (event) => {
   let browser = null;
-  let result = null
+  let result = null;
 
   browser = await chromium.puppeteer.launch({
     args: chromium.args,
@@ -14,14 +14,13 @@ exports.handler = async (event) => {
   });
 
   const targetUrl = event.queryStringParameters.url;
-  if(targetUrl.contains('ticketmaster.com')){
+  if (targetUrl.includes("ticketmaster.com")) {
     // TODO: function which takes the browser as an input to do whatever
-    result = "ticketMaster"
-  }else if (targetUrl.contains('jambase.com')){
+    result = "ticketMaster";
+  } else if (targetUrl.includes("jambase.com")) {
     // TODO : function which takes the browser as an input to do whatever
-    result = "jambase"
+    result = "jambase";
   }
-  
 
   await browser.close();
   return {
