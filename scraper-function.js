@@ -3,6 +3,7 @@ const headers = require("./utils/headers");
 
 exports.handler = async (event) => {
   let browser = null;
+  let result = null
 
   browser = await chromium.puppeteer.launch({
     args: chromium.args,
@@ -13,20 +14,21 @@ exports.handler = async (event) => {
   });
 
   const targetUrl = event.queryStringParameters.url;
+  if(targetUrl.contains('ticketmaster.com')){
+    // TODO: function which takes the browser as an input to do whatever
+    result = "ticketMaster"
+  }else if (targetUrl.contains('jambase.com')){
+    // TODO : function which takes the browser as an input to do whatever
+    result = "jambase"
+  }
+  
 
-  const page = await browser.newPage();
-  // await page.setViewport({ width: 1920, height: 1080 });
-  await page.goto(targetUrl, {
-    waitUntil: ["domcontentloaded", "networkidle2"],
-  });
-  // TODO: Implement a switch/ if statement, which allows you to do different actions depending on the url we are scraping
-  const content = await page.evaluate(() => document.body.innerHTML);
   await browser.close();
   return {
     statusCode: 200,
     headers,
     body: JSON.stringify({
-      content,
+      result,
     }),
   };
 };
