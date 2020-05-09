@@ -2,12 +2,21 @@ service: scrapper-lambda
 provider:
   name: aws
   region: eu-west-2
-  memorySize: 2536
-  timeout: 30
   runtime: nodejs10.x
+  environment:
+    "LIVESTREAMS_TABLENAME": ${env:LIVESTREAMS_TABLENAME}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource: "*"
 
 plugins:
   - serverless-offline
+  - serverless-dotenv-plugin
 
 package:
   exclude:
@@ -15,6 +24,8 @@ package:
 
 functions:
   scraper-function:
+    memorySize: 2536
+    timeout: 30
     handler: scraper-function.handler
     # environment:
     #   DEBUG: 0
@@ -22,3 +33,17 @@ functions:
       - http:
           path: /
           method: get
+
+resources:
+  Resources:
+    gsLivestreamsTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id"
+            KeyType: "HASH"
+        BillingMode: "PAY_PER_REQUEST"
+        TableName: ${env:LIVESTREAMS_TABLENAME}
