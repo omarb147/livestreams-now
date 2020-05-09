@@ -1,0 +1,24 @@
+service: scrapper-lambda
+provider:
+  name: aws
+  region: eu-west-2
+  memorySize: 2536
+  timeout: 30
+  runtime: nodejs10.x
+
+plugins:
+  - serverless-offline
+
+package:
+  exclude:
+    - node_modules/puppeteer/.local-chromium/**
+
+functions:
+  scraper-function:
+    handler: scraper-function.handler
+    # environment:
+    #   DEBUG: 0
+    events:
+      - http:
+          path: /
+          method: get
