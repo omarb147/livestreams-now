@@ -9,7 +9,7 @@ provider:
   stage: ${opt:stage, self:custom.personalStage ,self:custom.defaultStage}
   runtime: nodejs10.x
   environment:
-    LIVESTREAMS_TABLENAME: ${env:LIVESTREAMS_TABLENAME}
+    LIVESTREAMS_TABLENAME: ${env:LIVESTREAMS_TABLENAME}-${self:provider.stage}
     NODE_PATH: "./:/opt/node_modules"
   iamRoleStatements:
     - Effect: Allow
