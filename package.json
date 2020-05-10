@@ -13,13 +13,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "chrome-aws-lambda": "^3.0.4",
-    "puppeteer-core": "^3.0.4",
+    "aws-sdk": "^2.673.0",
     "serverless-dotenv-plugin": "^2.4.2",
     "uuid": "^8.0.0"
   },
   "devDependencies": {
-    "aws-sdk": "^2.673.0",
+    "chrome-aws-lambda": "^3.0.4",
     "serverless-offline": "^5.12.1",
     "puppeteer": "^3.0.4",
     "chrome-launcher": "^0.12.0"
