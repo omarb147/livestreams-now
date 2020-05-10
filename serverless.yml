@@ -1,7 +1,11 @@
 service: scrapper-lambda
+custom:
+  defaultStage: "dev"
+
 provider:
   name: aws
   region: eu-west-2
+  stage: ${opt:stage, self:custom.defaultStage}
   runtime: nodejs10.x
   environment:
     LIVESTREAMS_TABLENAME: ${env:LIVESTREAMS_TABLENAME}
@@ -21,6 +25,7 @@ plugins:
 
 layers:
   chromeModule:
+    name: chromeModule-${self:provider.stage}
     path: lambda-layers/chrome-layer
     description: "chrome browser module for lambdas"
     compatibleRuntimes:
@@ -29,6 +34,7 @@ layers:
       include:
         - node_modules/**
   commonModule:
+    name: commonModule-${self:provider.stage}
     path: lambda-layers/common-module
     description: "contains all common libraries and middleware for lambdas"
     compatibleRuntimes:
@@ -44,6 +50,7 @@ package:
 
 functions:
   scraper-function:
+    name: "scraper-function-${self:provider.stage}"
     memorySize: 2536
     timeout: 30
     environment:
@@ -69,4 +76,4 @@ resources:
           - AttributeName: "id"
             KeyType: "HASH"
         BillingMode: "PAY_PER_REQUEST"
-        TableName: ${env:LIVESTREAMS_TABLENAME}
+        TableName: ${env:LIVESTREAMS_TABLENAME}-${self:provider.stage}
