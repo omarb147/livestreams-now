@@ -12,7 +12,7 @@ exports.handler = async (event) => {
     headless: true,
     ignoreHTTPSErrors: true,
   });
-  
+
   const targetUrl = event.queryStringParameters.url;
   if (targetUrl.includes("ticketmaster.com")) {
     // TODO: function which takes the browser as an input to do whatever
