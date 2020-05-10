@@ -42,16 +42,16 @@ serverless invoke local --aws-profile {{AWS_PROFILE_NAME}} --function {{FUNCTION
 
 ## Deploying to server
 
-To deploy too the server run the commmand
+To deploy to the server run the commmand
 
-> note that if you don't input a stage option it will deploy to the dev stage by default, currently we are only working with prod and dev stages
+> note that the --stage variable should only be used when deploying to prod, and if you don't have the variable `STACK_NAME = {{MY_STACK_NAME}}` in your .env file the deployment will default to the dev stage.
 
 ```
-serverless deploy --aws-profile {{AWS_PROFILE_NAME}} --stage {{STAGE}}
+serverless deploy --aws-profile {{AWS_PROFILE_NAME}}
 ```
 
 to deploy a single function use the
 
 ```
-serverless deploy --aws-profile {{AWS_PROFILE_NAME}} --stage {{STAGE}} --f {{function-name}}
+serverless deploy --aws-profile {{AWS_PROFILE_NAME}}  --f {{function-name}}
 ```
