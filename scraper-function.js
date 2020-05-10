@@ -22,7 +22,6 @@ const main = async (event) => {
   } else if (targetUrl.includes("jambase.com")) {
     // TODO : function which takes the browser as an input to do whatever
     result = await getJambaseData(browser, targetUrl);
-    console.log("MAIN_RESULT", result);
   }
 
   await browser.close();

@@ -3,7 +3,6 @@ module.exports = async (browser, targetURL) => {
   await page.setViewport({ width: 1280, height: 800 });
   await page.goto(targetURL);
   await page.waitForSelector("div.article-content");
-  console.log("PAGE", page);
 
   const data = await page.evaluate(() => {
     const callQuerySelector = (item, element, property) =>
@@ -12,7 +11,6 @@ module.exports = async (browser, targetURL) => {
     let items = document.querySelectorAll(
       ".streams-list.js-stickybit-parent >ul >li >div.item-wrap >div.col-content"
     );
-    console.log("ITEMS", items);
     try {
       items.forEach((item) => {
         let artist = callQuerySelector(item, "h3", "innerText");
@@ -30,7 +28,6 @@ module.exports = async (browser, targetURL) => {
     } catch (error) {
       throw new Error(error);
     }
-    console.log("JAMBASE_RESULTS", results);
     return results;
   });
   return data;
