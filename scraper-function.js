@@ -15,20 +15,21 @@ const main = async (event) => {
     ignoreHTTPSErrors: true,
   });
 
-  const targetUrl = "https://www.jambase.com/livestreams";
+  const targetUrl = event.queryStringParameters.url;
   if (targetUrl.includes("ticketmaster.com")) {
     // TODO: function which takes the browser as an input to do whatever
     result = "ticketMaster";
   } else if (targetUrl.includes("jambase.com")) {
     // TODO : function which takes the browser as an input to do whatever
     result = await getJambaseData(browser, targetUrl);
+    console.log("MAIN_RESULT", result);
   }
 
   await browser.close();
   return {
     statusCode: 200,
     headers,
-    body: result,
+    body: JSON.stringify(result),
   };
 };
 
