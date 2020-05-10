@@ -46,10 +46,9 @@ functions:
   scraper-function:
     memorySize: 2536
     timeout: 30
-    handler:
-      scraper-function.handler
-      # environment:
-    #   DEBUG: 0
+    environment:
+      DEBUG: 0
+    handler: scraper-function.handler
     events:
       - http:
           path: /
