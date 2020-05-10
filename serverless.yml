@@ -1,11 +1,12 @@
 service: scrapper-lambda
 custom:
   defaultStage: "dev"
+  personalStage: "${env:STACK_NAME}"
 
 provider:
   name: aws
   region: eu-west-2
-  stage: ${opt:stage, self:custom.defaultStage}
+  stage: ${opt:stage, self:custom.personalStage ,self:custom.defaultStage}
   runtime: nodejs10.x
   environment:
     LIVESTREAMS_TABLENAME: ${env:LIVESTREAMS_TABLENAME}
