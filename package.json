@@ -19,8 +19,8 @@
   },
   "devDependencies": {
     "chrome-aws-lambda": "^3.0.4",
-    "serverless-offline": "^5.12.1",
+    "chrome-launcher": "^0.12.0",
     "puppeteer": "^3.0.4",
-    "chrome-launcher": "^0.12.0"
+    "serverless-offline": "^5.12.1"
   }
 }
