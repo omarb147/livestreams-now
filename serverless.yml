@@ -4,7 +4,8 @@ provider:
   region: eu-west-2
   runtime: nodejs10.x
   environment:
-    "LIVESTREAMS_TABLENAME": ${env:LIVESTREAMS_TABLENAME}
+    LIVESTREAMS_TABLENAME: ${env:LIVESTREAMS_TABLENAME}
+    NODE_PATH: "./:/opt/node_modules"
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -18,21 +19,32 @@ plugins:
   - serverless-offline
   - serverless-dotenv-plugin
 
+layers:
+  chromeModule:
+    path: lambda-layers/chrome-layer
+    description: "chrome browser module for lambdas"
+    compatibleRuntimes:
+      - nodejs10.x
+    package:
+      include:
+        - node_modules/**
+
 package:
   exclude:
     - node_modules/puppeteer/.local-chromium/**
+    - lambda-layers/chrome-layer/**
 
 functions:
   scraper-function:
     memorySize: 2536
     timeout: 30
     handler: scraper-function.handler
-    # environment:
-    #   DEBUG: 0
     events:
       - http:
           path: /
           method: get
+    layers:
+      - { Ref: ChromeModuleLambdaLayer }
 
 resources:
   Resources:
