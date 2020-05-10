@@ -53,7 +53,7 @@ functions:
   scraper-function:
     name: "scraper-function-${self:provider.stage}"
     memorySize: 2536
-    timeout: 30
+    timeout: 6
     environment:
       DEBUG: 0
     handler: scraper-function.handler

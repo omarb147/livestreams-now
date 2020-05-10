@@ -2,33 +2,48 @@ const chromium = require("chrome-aws-lambda");
 const headers = require("./utils/headers");
 const middy = require("/opt/middy-wrapper");
 const getJambaseData = require("./websites/scrapeJambase");
+const firebaseConfig = require("./config/db.config");
 
-const main = async (event) => {
-  let browser = null;
-  let result = null;
+var firebase = require("firebase");
+var app = firebase.initializeApp(firebaseConfig);
 
-  browser = await chromium.puppeteer.launch({
-    args: chromium.args,
-    defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath,
-    headless: true,
-    ignoreHTTPSErrors: true,
-  });
+async function getdata() {
+  return app
+    .firestore()
+    .collection("scrapedData")
+    .get()
+    .then((data) => data.data());
+}
 
-  const targetUrl = event.queryStringParameters.url;
-  if (targetUrl.includes("ticketmaster.com")) {
-    // TODO: function which takes the browser as an input to do whatever
-    result = "ticketMaster";
-  } else if (targetUrl.includes("jambase.com")) {
-    // TODO : function which takes the browser as an input to do whatever
-    result = await getJambaseData(browser, targetUrl);
-  }
+const main = async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  // let browser = null;
+  // let result = null;
 
-  await browser.close();
+  // browser = await chromium.puppeteer.launch({
+  //   args: chromium.args,
+  //   defaultViewport: chromium.defaultViewport,
+  //   executablePath: await chromium.executablePath,
+  //   headless: true,
+  //   ignoreHTTPSErrors: true,
+  // });
+
+  // const targetUrl = event.queryStringParameters.url;
+  // if (targetUrl.includes("ticketmaster.com")) {
+  //   // TODO: function which takes the browser as an input to do whatever
+  //   result = "ticketMaster";
+  // } else if (targetUrl.includes("jambase.com")) {
+  //   // TODO : function which takes the browser as an input to do whatever
+  //   result = await getJambaseData(browser, targetUrl);
+  // }
+  // await browser.close();
+  const test = await getdata();
+  console.log(test);
+
   return {
     statusCode: 200,
     headers,
-    body: JSON.stringify(result),
+    body: JSON.stringify(test),
   };
 };
 
