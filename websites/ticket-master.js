@@ -1,12 +1,7 @@
-const puppeteer = require('puppeteer');
+module.exports = async (browser, targetURL) => {
 
-(async () => {
-
-
-    const ticketMasterUrl = 'https://discover.ticketmaster.co.uk/music/our-guide-to-finding-the-best-live-stream-gigs-49794/'
-    const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.goto(ticketMasterUrl);
+    await page.goto(targetURL);
     await page.waitForSelector('h4');
 
     let ticketMasterStreams = await page.evaluate(() => {
@@ -55,8 +50,8 @@ const puppeteer = require('puppeteer');
         });
         return liveStreams;
     });
-    await browser.close();
-})();
+    return ticketMasterStreams;
+    };
 
 
 
