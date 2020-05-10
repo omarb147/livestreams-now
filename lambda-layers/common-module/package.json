@@ -1,0 +1,11 @@
+{
+  "name": "common-module",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.673.0",
+    "http-errors": "^1.7.3",
+    "middy": "^0.36.0"
+  }
+}

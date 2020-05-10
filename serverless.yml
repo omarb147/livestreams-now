@@ -28,22 +28,34 @@ layers:
     package:
       include:
         - node_modules/**
+  commonModule:
+    path: lambda-layers/common-module
+    description: "contains all common libraries and middleware for lambdas"
+    compatibleRuntimes:
+      - nodejs10.x
+    package:
+      include:
+        - node_modules/**
 
 package:
   exclude:
     - node_modules/puppeteer/.local-chromium/**
-    - lambda-layers/chrome-layer/**
+    - lambda-layers/**
 
 functions:
   scraper-function:
     memorySize: 2536
     timeout: 30
-    handler: scraper-function.handler
+    handler:
+      scraper-function.handler
+      # environment:
+    #   DEBUG: 0
     events:
       - http:
           path: /
           method: get
     layers:
+      - { Ref: CommonModuleLambdaLayer }
       - { Ref: ChromeModuleLambdaLayer }
 
 resources:

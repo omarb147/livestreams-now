@@ -1,7 +1,8 @@
 const chromium = require("chrome-aws-lambda");
 const headers = require("./utils/headers");
+const middy = require("/opt/middy-wrapper");
 
-exports.handler = async (event) => {
+const main = async (event) => {
   let browser = null;
   let result = null;
 
@@ -31,3 +32,5 @@ exports.handler = async (event) => {
     }),
   };
 };
+
+exports.handler = middy(main);
