@@ -40,6 +40,18 @@ package:
     - lambda-layers/**
 
 functions:
+  get-livestreams-function:
+    memorySize: 2536
+    timeout: 30
+    environment:
+      DEBUG: 0
+    handler: lambdas/get-livestreams.handler
+    events:
+      - http:
+          path: /get-livestreams
+          method: get
+    layers:
+      - { Ref: CommonModuleLambdaLayer }
   scraper-function:
     memorySize: 2536
     timeout: 30
@@ -48,7 +60,7 @@ functions:
     handler: lambdas/scraper-function.handler
     events:
       - http:
-          path: /
+          path: /scrape-data
           method: get
     layers:
       - { Ref: CommonModuleLambdaLayer }
