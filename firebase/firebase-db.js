@@ -80,13 +80,9 @@ const addFilteredDocuments = async (fieldToCheck, data, collection) => {
 };
 
 module.exports = {
-<<<<<<< HEAD
   getAllDataFromCollection,
   addSingleDocument,
   addMultipleDocuments,
   searchCollections,
   addFilteredDocuments,
-=======
-  getAllDataFromCollection
->>>>>>> Setup Lambda Function For Firebase Get Request
 };
