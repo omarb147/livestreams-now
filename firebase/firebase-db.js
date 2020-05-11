@@ -7,8 +7,6 @@ admin.initializeApp({
   databaseURL: "https://gs-livestream.firebaseio.com",
 });
 
-let jambaseScrape = require("./jambaseResponse.json");
-
 const db = admin.firestore();
 
 // GET ALL DATA FROM DB
@@ -34,9 +32,9 @@ const addSingleDocument = async (collection, data) => {
 };
 
 // ADD MULTIPLE DOCS TO DB
-const addMultipleDocuments = (data, collection) => {
-  data.forEach(async (doc) => {
-    await addSingleDocument(collection, doc);
+const addMultipleDocuments = async (data, collection) => {
+  return await data.forEach((doc) => {
+    addSingleDocument(collection, doc);
   });
 };
 
@@ -51,7 +49,6 @@ const searchCollections = async (collection, field, searchText) => {
       console.log("-----------search return empty. add new data.");
       return true;
     } else {
-      // console.log("------existing field found");
       return false;
     }
   } catch (error) {
@@ -61,14 +58,13 @@ const searchCollections = async (collection, field, searchText) => {
 };
 
 // VALIDATE AND ADD NEW ENTRIES TO DB
-const addFilteredDocuments = async (scrapedData, collection) => {
+const addFilteredDocuments = async (fieldToCheck, data, collection) => {
   try {
-    let field = "artist";
-    scrapedData.forEach(async (doc) => {
-      let searchText = doc.artist;
+    data.forEach(async (doc) => {
+      let searchText = doc[fieldToCheck];
       let dataInDatabase = await searchCollections(
         collection,
-        field,
+        fieldToCheck,
         searchText
       );
       console.log(dataInDatabase);
@@ -90,6 +86,3 @@ module.exports = {
   searchCollections,
   addFilteredDocuments,
 };
-
-// let collection = "jambaseDB";
-// addFilteredDocuments(jambaseScrape, collection);
