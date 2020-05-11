@@ -11,7 +11,7 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-const addCollection = async (collection, data) => {
+const addSingleDocument = async (collection, data) => {
   try {
     return await db.collection(collection).add(data);
   } catch (error) {
@@ -20,7 +20,7 @@ const addCollection = async (collection, data) => {
   }
 };
 
-const searchDatabase = async (collection, field, searchText) => {
+const searchCollections = async (collection, field, searchText) => {
   let response = await db
     .collection(collection)
     .where(field, "==", searchText)
@@ -34,27 +34,27 @@ const searchDatabase = async (collection, field, searchText) => {
   }
 };
 
-const addAllData = (collection) => {
+const addFilteredDocuments = (collection) => {
   let field = "artist";
   jambaseScrape.forEach(async (data) => {
     let searchText = data.artist;
-    let dataInDatabase = await searchDatabase(collection, field, searchText);
+    let dataInDatabase = await searchCollections(collection, field, searchText);
     console.log(dataInDatabase);
     if (dataInDatabase == true) {
       console.log(`--->added ${searchText} to firebase`);
-      await addCollection(collection, data);
+      await addSingleDocument(collection, data);
     }
   });
 };
 
-const uploadTofirebase = (collection) => {
+const addMultipleDocuments = (collection) => {
   jambaseScrape.forEach(async (data) => {
-    await addCollection("jambaseStreams", data);
+    await addSingleDocument("jambaseStreams", data);
   });
 };
 
 const main = async () => {
   let collection = "jambaseStreams";
-  addAllData(collection);
+  addFilteredDocuments(collection);
 };
 main();
