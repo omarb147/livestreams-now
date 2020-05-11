@@ -3,6 +3,7 @@ node_modules
 jspm_packages
 .env
 firebaseConfig.json
+.idea
 
 # Serverless directories
 .serverless
