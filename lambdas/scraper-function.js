@@ -29,7 +29,7 @@ const main = async (event) => {
   if (targetUrl.includes("ticketmaster.co.uk")) {
     // TODO: function which takes the browser as an input to do whatever
     result = await getTicketMasterData(browser, targetUrl);
-    dbColection = "ticketmasterDB";
+    dbCollection = "ticketmasterDB";
   } else if (targetUrl.includes("jambase.com")) {
     // TODO : function which takes the browser as an input to do whatever
     result = await getJambaseData(browser, targetUrl);
