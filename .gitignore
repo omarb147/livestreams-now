@@ -4,6 +4,6 @@ jspm_packages
 .env
 firebaseConfig.json
 .idea
-
+yarn.lock
 # Serverless directories
 .serverless
