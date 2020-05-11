@@ -43,7 +43,7 @@ module.exports = async (browser, targetURL) => {
     });
 
     validatedLiveStreams.forEach((validatedLiveStream) => {
-      let liveStream = { artistName: "", time: "", linkToStream: "" };
+      let liveStream = { artist: "", time: "", linkToStream: "" };
       getStreamTime(validatedLiveStream, liveStream);
       getArtistName(validatedLiveStream, liveStream);
       getStreamLink(validatedLiveStream, liveStream);
