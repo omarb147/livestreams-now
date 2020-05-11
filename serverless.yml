@@ -9,16 +9,7 @@ provider:
   stage: ${opt:stage, self:custom.personalStage ,self:custom.defaultStage}
   runtime: nodejs10.x
   environment:
-    LIVESTREAMS_TABLENAME: ${env:LIVESTREAMS_TABLENAME}-${self:provider.stage}
     NODE_PATH: "./:/opt/node_modules"
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-      Resource: "*"
 
 plugins:
   - serverless-offline
@@ -64,6 +55,7 @@ functions:
     layers:
       - { Ref: CommonModuleLambdaLayer }
       - { Ref: ChromeModuleLambdaLayer }
+<<<<<<< HEAD
 
 resources:
   Resources:
@@ -78,3 +70,5 @@ resources:
             KeyType: "HASH"
         BillingMode: "PAY_PER_REQUEST"
         TableName: ${env:LIVESTREAMS_TABLENAME}-${self:provider.stage}
+=======
+>>>>>>> refactored firebase to seperate file
