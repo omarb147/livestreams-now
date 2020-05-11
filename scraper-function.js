@@ -2,6 +2,7 @@ const chromium = require("chrome-aws-lambda");
 const headers = require("./utils/headers");
 const middy = require("/opt/middy-wrapper");
 const getJambaseData = require("./websites/scrapeJambase");
+const { getAllDataFromCollection } = require("./utils/firebase-libs");
 
 const main = async (event) => {
   let browser = null;
