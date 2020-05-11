@@ -62,6 +62,7 @@ functions:
       - http:
           path: /scrape-data
           method: get
+          cors: true
     layers:
       - { Ref: CommonModuleLambdaLayer }
       - { Ref: ChromeModuleLambdaLayer }
