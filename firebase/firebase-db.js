@@ -20,6 +20,21 @@ const getAllDataFromCollection = async (collection) => {
   }
 };
 
+const addCollection = async (collection, data) => {
+  db.collection(collection)
+    .add(data)
+    .then((ref) => {
+      // On a successful write, return an object
+      // containing the new doc id.
+    })
+    .catch((err) => {
+      // Forward errors if the write fails
+      console.log();
+      callback(err);
+    });
+};
+
 module.exports = {
   getAllDataFromCollection,
+  addCollection,
 };
