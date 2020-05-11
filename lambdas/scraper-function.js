@@ -7,7 +7,7 @@ const headers = require("../utils/headers");
 const { getAllDataFromCollection } = require("../firebase/firebase-db");
 // OTHER FUNCTIONS
 const getJambaseData = require("../websites/scrapeJambase");
-const getTicketMasterData = require("./websites/ticket-master");
+const getTicketMasterData = require("../websites/ticket-master");
 
 const main = async (event) => {
   let browser = null;
