@@ -1,9 +1,13 @@
 service: scrapper-lambda
 
+custom:
+  userStage: ${env:STACK_NAME}
+  defaultStage: "dev"
+
 provider:
   name: aws
   region: eu-west-2
-  stage: ${opt:stage, 'dev'}
+  stage: ${opt:stage, self:custom.userStage, self:custom.defaultStage}
   runtime: nodejs10.x
   environment:
     NODE_PATH: "./:/opt/node_modules"
@@ -41,7 +45,7 @@ functions:
     timeout: 30
     environment:
       DEBUG: 0
-    handler: scraper-function.handler
+    handler: lambdas/scraper-function.handler
     events:
       - http:
           path: /
