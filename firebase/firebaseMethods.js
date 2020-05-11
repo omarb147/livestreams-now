@@ -34,9 +34,7 @@ const searchDatabase = async (collection, field, searchText) => {
   }
 };
 
-// FIXME: duplicates
-const addAllData = () => {
-  let collection = "jambaseStreams";
+const addAllData = (collection) => {
   let field = "artist";
   jambaseScrape.forEach(async (data) => {
     let searchText = data.artist;
@@ -49,16 +47,14 @@ const addAllData = () => {
   });
 };
 
-const uploadTofirebase = () => {
+const uploadTofirebase = (collection) => {
   jambaseScrape.forEach(async (data) => {
     await addCollection("jambaseStreams", data);
   });
 };
 
 const main = async () => {
-  addAllData();
-  // db.collection("cities").where("capital", "==", true).get();
+  let collection = "jambaseStreams";
+  addAllData(collection);
 };
 main();
-
-// TODO: method to add for each response
