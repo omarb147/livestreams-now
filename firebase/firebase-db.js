@@ -1,6 +1,6 @@
 let admin = require("firebase-admin");
 
-const serviceAccount = require("../firebaseConfig.json");
+const serviceAccount = require("../config.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -9,6 +9,7 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
+// GET ALL DATA FROM DB
 const getAllDataFromCollection = async (collection) => {
   const data = [];
   try {
@@ -20,21 +21,54 @@ const getAllDataFromCollection = async (collection) => {
   }
 };
 
-const addCollection = async (collection, data) => {
-  db.collection(collection)
-    .add(data)
-    .then((ref) => {
-      // On a successful write, return an object
-      // containing the new doc id.
-    })
-    .catch((err) => {
-      // Forward errors if the write fails
-      console.log();
-      callback(err);
-    });
+// ADD SINGLE DOC TO DB
+const addSingleDocument = async (collection, data) => {
+  try {
+    return await db.collection(collection).add(data);
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+// ADD MULTIPLE DOCS TO DB
+const addMultipleDocuments = (collection) => {
+  jambaseScrape.forEach(async (data) => {
+    await addSingleDocument("jambaseStreams", data);
+  });
+};
+
+// SEARCH DB COLLECTIONS
+const searchCollections = async (collection, field, searchText) => {
+  let response = await db
+    .collection(collection)
+    .where(field, "==", searchText)
+    .get();
+  if (response.empty) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+// VALIDATE AND ADD NEW ENTRIES TO DB
+const addFilteredDocuments = (collection) => {
+  let field = "artist";
+  jambaseScrape.forEach(async (data) => {
+    let searchText = data.artist;
+    let dataInDatabase = await searchCollections(collection, field, searchText);
+    console.log(dataInDatabase);
+    if (dataInDatabase == true) {
+      console.log(`--->added ${searchText} to firebase`);
+      await addSingleDocument(collection, data);
+    }
+  });
 };
 
 module.exports = {
   getAllDataFromCollection,
-  addCollection,
+  addSingleDocument,
+  addMultipleDocuments,
+  searchCollections,
+  addFilteredDocuments,
 };
