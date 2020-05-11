@@ -27,14 +27,10 @@ const main = async (event) => {
 
   await browser.close();
 
-  const test = await getAllDataFromCollection("lambda-docs-test");
-
-  console.log(test);
-
   return {
     statusCode: 200,
     headers,
-    body: JSON.stringify(test),
+    body: JSON.stringify(result),
   };
 };
 
