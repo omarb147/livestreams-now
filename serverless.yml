@@ -1,24 +1,12 @@
 service: scrapper-lambda
-custom:
-  defaultStage: "dev"
-  personalStage: "${env:STACK_NAME}"
 
 provider:
   name: aws
   region: eu-west-2
-  stage: ${opt:stage, self:custom.personalStage ,self:custom.defaultStage}
+  stage: ${opt:stage, 'dev'}
   runtime: nodejs10.x
   environment:
-    LIVESTREAMS_TABLENAME: ${env:LIVESTREAMS_TABLENAME}-${self:provider.stage}
     NODE_PATH: "./:/opt/node_modules"
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-      Resource: "*"
 
 plugins:
   - serverless-offline
@@ -26,7 +14,6 @@ plugins:
 
 layers:
   chromeModule:
-    name: chromeModule-${self:provider.stage}
     path: lambda-layers/chrome-layer
     description: "chrome browser module for lambdas"
     compatibleRuntimes:
@@ -35,7 +22,6 @@ layers:
       include:
         - node_modules/**
   commonModule:
-    name: commonModule-${self:provider.stage}
     path: lambda-layers/common-module
     description: "contains all common libraries and middleware for lambdas"
     compatibleRuntimes:
@@ -51,7 +37,6 @@ package:
 
 functions:
   scraper-function:
-    name: "scraper-function-${self:provider.stage}"
     memorySize: 2536
     timeout: 30
     environment:
@@ -64,17 +49,3 @@ functions:
     layers:
       - { Ref: CommonModuleLambdaLayer }
       - { Ref: ChromeModuleLambdaLayer }
-
-resources:
-  Resources:
-    gsLivestreamsTable:
-      Type: "AWS::DynamoDB::Table"
-      Properties:
-        AttributeDefinitions:
-          - AttributeName: "id"
-            AttributeType: "S"
-        KeySchema:
-          - AttributeName: "id"
-            KeyType: "HASH"
-        BillingMode: "PAY_PER_REQUEST"
-        TableName: ${env:LIVESTREAMS_TABLENAME}-${self:provider.stage}
