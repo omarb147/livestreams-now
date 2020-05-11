@@ -16,11 +16,11 @@ module.exports = async (browser, targetURL) => {
     function getArtistName(validatedLiveStream, liveStream) {
       const startOfArtistName = validatedLiveStream.indexOf("/strong>") + 8;
       const endOfArtistName = validatedLiveStream.indexOf("<br");
-      const artistName = validatedLiveStream.slice(
+      const artist = validatedLiveStream.slice(
         startOfArtistName,
         endOfArtistName
       );
-      liveStream.artistName = artistName;
+      liveStream.artist = artist;
     }
 
     function getStreamLink(validatedLiveStream, liveStream) {
@@ -43,7 +43,7 @@ module.exports = async (browser, targetURL) => {
     });
 
     validatedLiveStreams.forEach((validatedLiveStream) => {
-      let liveStream = { artistName: "", time: "", linkToStream: "" };
+      let liveStream = { artist: "", time: "", linkToStream: "" };
       getStreamTime(validatedLiveStream, liveStream);
       getArtistName(validatedLiveStream, liveStream);
       getStreamLink(validatedLiveStream, liveStream);

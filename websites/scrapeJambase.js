@@ -21,7 +21,7 @@ module.exports = async (browser, targetURL) => {
         results.push({
           artist,
           description,
-          source: url,
+          linkToStream: url,
           date: time,
         });
       });
