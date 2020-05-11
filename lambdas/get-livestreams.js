@@ -1,11 +1,11 @@
-
+const middy = require("/opt/middy-wrapper");
 const headers = require("../utils/headers");
-module.exports.handler = (event, context, callback) => {
-    console.log('CAN WE WORK PLS');
+
+const main = async () => {
     return {
         statusCode: 200,
         headers,
-        body: JSON.stringify('Getting Livestream Data'),
-    }
-
+        body: JSON.stringify({message: 'Livestreams Successfully Received Retrieved'})
+    };
 }
+exports.handler = middy(main);
