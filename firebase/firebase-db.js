@@ -1,11 +1,13 @@
 let admin = require("firebase-admin");
 
-const serviceAccount = require("../config.json");
+const serviceAccount = require("../firebaseConfig.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://gs-livestream.firebaseio.com",
 });
+
+let jambaseScrape = require("./jambaseResponse.json");
 
 const db = admin.firestore();
 
@@ -32,37 +34,53 @@ const addSingleDocument = async (collection, data) => {
 };
 
 // ADD MULTIPLE DOCS TO DB
-const addMultipleDocuments = (collection) => {
-  jambaseScrape.forEach(async (data) => {
-    await addSingleDocument("jambaseStreams", data);
+const addMultipleDocuments = (data, collection) => {
+  data.forEach(async (doc) => {
+    await addSingleDocument(collection, doc);
   });
 };
 
 // SEARCH DB COLLECTIONS
 const searchCollections = async (collection, field, searchText) => {
-  let response = await db
-    .collection(collection)
-    .where(field, "==", searchText)
-    .get();
-  if (response.empty) {
-    return true;
-  } else {
-    return false;
+  try {
+    let response = await db
+      .collection(collection)
+      .where(field, "==", searchText)
+      .get();
+    if (response.empty) {
+      console.log("-----------search return empty. add new data.");
+      return true;
+    } else {
+      // console.log("------existing field found");
+      return false;
+    }
+  } catch (error) {
+    console.log(error);
+    return error;
   }
 };
 
 // VALIDATE AND ADD NEW ENTRIES TO DB
-const addFilteredDocuments = (collection) => {
-  let field = "artist";
-  jambaseScrape.forEach(async (data) => {
-    let searchText = data.artist;
-    let dataInDatabase = await searchCollections(collection, field, searchText);
-    console.log(dataInDatabase);
-    if (dataInDatabase == true) {
-      console.log(`--->added ${searchText} to firebase`);
-      await addSingleDocument(collection, data);
-    }
-  });
+const addFilteredDocuments = async (scrapedData, collection) => {
+  try {
+    let field = "artist";
+    scrapedData.forEach(async (doc) => {
+      let searchText = doc.artist;
+      let dataInDatabase = await searchCollections(
+        collection,
+        field,
+        searchText
+      );
+      console.log(dataInDatabase);
+      if (dataInDatabase == true) {
+        console.log(`--->added ${searchText} to firebase`);
+        await addSingleDocument(collection, doc);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
 };
 
 module.exports = {
@@ -72,3 +90,6 @@ module.exports = {
   searchCollections,
   addFilteredDocuments,
 };
+
+// let collection = "jambaseDB";
+// addFilteredDocuments(jambaseScrape, collection);
