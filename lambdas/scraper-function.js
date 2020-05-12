@@ -13,6 +13,7 @@ const getJambaseData = require("../websites/scrapeJambase");
 const getTicketMasterData = require("../websites/ticket-master");
 
 const main = async (event) => {
+  console.log('Event: ', event);
   let browser = null;
   let result = null;
   let dbCollection = null;
@@ -27,10 +28,12 @@ const main = async (event) => {
 
   const targetUrl = event.queryStringParameters.url;
   if (targetUrl.includes("ticketmaster.co.uk")) {
+    console.log('Ticket Master Hit');
     // TODO: function which takes the browser as an input to do whatever
     result = await getTicketMasterData(browser, targetUrl);
     dbCollection = process.env.TICKETMASTER_DB;
   } else if (targetUrl.includes("jambase.com")) {
+    console.log('Jambase Hit');
     // TODO : function which takes the browser as an input to do whatever
     result = await getJambaseData(browser, targetUrl);
     dbCollection = process.env.JAMBASE_DB;

@@ -52,17 +52,50 @@ functions:
           method: get
     layers:
       - { Ref: CommonModuleLambdaLayer }
-  scraper-function:
+
+  lambda-scheduler-function:
     memorySize: 2536
     timeout: 30
     environment:
       DEBUG: 0
-    handler: lambdas/scraper-function.handler
+    handler: lambdas/lambda-scheduler.handler
+    #    events:
+    #      - schedule: rate( minute)
     events:
       - http:
-          path: /scrape-data
+          path: /lambda-scheduler
           method: get
           cors: true
     layers:
       - { Ref: CommonModuleLambdaLayer }
-      - { Ref: ChromeModuleLambdaLayer }
+
+  test:
+    memorySize: 2536
+    timeout: 30
+    environment:
+      DEBUG: 0
+    handler: lambdas/test.handler
+    #    events:
+    #      - schedule: rate( minute)
+    events:
+      - http:
+          path: /test
+          method: get
+          cors: true
+    layers:
+      - { Ref: CommonModuleLambdaLayer }
+
+    scraper-function:
+      memorySize: 2536
+      timeout: 30
+      environment:
+        DEBUG: 0
+      handler: lambdas/scraper-function.handler
+      events:
+        - http:
+            path: /scrape-data
+            method: get
+            cors: true
+      layers:
+        - { Ref: CommonModuleLambdaLayer }
+        - { Ref: ChromeModuleLambdaLayer }
