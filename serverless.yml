@@ -48,7 +48,7 @@ functions:
     handler: lambdas/get-livestreams.handler
     events:
       - http:
-          path: /get-livestreams
+          path: /livestreams
           method: get
     layers:
       - { Ref: CommonModuleLambdaLayer }
