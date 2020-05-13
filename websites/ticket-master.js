@@ -8,6 +8,7 @@ module.exports = async (browser, targetURL) => {
 
   let ticketMasterStreams = await page.evaluate(() => {
     const $ = window.$; //otherwise the transpiler will rename it and won't work
+    const source = "ticketmaster";
     const data = [];
     $("h4").each((index, dateElement) => {
       const dateValue = $(dateElement).text().trim();
@@ -18,13 +19,22 @@ module.exports = async (browser, targetURL) => {
         .each((index, livestream) => {
           $(livestream).find("strong").remove();
           if ($(livestream).text() !== "") {
-            const rawData = $(livestream).text().split("\n");
+            const rawData = $(livestream).text().trim().split("\n");
             const title = rawData[0];
             const time = rawData[1];
-            const platform = rawData[3] !== "More Info" ? rawData[3] : "";
+            const platform = rawData[2] !== "More Info" ? rawData[2] : "";
             const livestreamUrl = $(livestream).find("a").attr("href");
-
-            data.push({ title, time, platform, dateValue, livestreamUrl });
+            // Appears to be some events at the bottom of the page with long descriptions, generally these don't have date
+            if (livestreamUrl) {
+              data.push({
+                title,
+                time,
+                platform,
+                dateValue,
+                livestreamUrl,
+                source,
+              });
+            }
           }
         });
     });
