@@ -30,7 +30,7 @@ module.exports = async (browser, targetURL) => {
                 title,
                 time,
                 platform,
-                dateValue,
+                date: dateValue,
                 livestreamUrl,
                 source,
               });
