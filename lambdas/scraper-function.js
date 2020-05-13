@@ -1,13 +1,13 @@
+// PATH MODULES
+require("module-alias/register");
+const paths = require("../utils/pathVars");
 // EXTERNAL PACKAGES
 const chromium = require("chrome-aws-lambda");
 // LAYER PACKAGES
-const middy = require("/opt/middy-wrapper");
+const middy = require(`${paths.COMMON_MODULE_LAYER_PATH}middy-wrapper`);
 // UTILITY FUNCTIONS
 const headers = require("../utils/headers");
-const {
-  getAllDataFromCollection,
-  addFilteredDocuments,
-} = require("../firebase/firebase-db");
+const { addFilteredDocuments } = require("../firebase/firebase-db");
 // PUPPETEER FUNCTIONS
 const getJambaseData = require("../websites/scrapeJambase");
 const getTicketMasterData = require("../websites/ticket-master");
@@ -29,16 +29,16 @@ const main = async (event) => {
   if (targetUrl.includes("ticketmaster.co.uk")) {
     // TODO: function which takes the browser as an input to do whatever
     result = await getTicketMasterData(browser, targetUrl);
-    dbCollection = process.env.TICKETMASTER_DB;
+    dbCollection = process.env.DB_NAME;
   } else if (targetUrl.includes("jambase.com")) {
     // TODO : function which takes the browser as an input to do whatever
     result = await getJambaseData(browser, targetUrl);
-    dbCollection = process.env.JAMBASE_DB;
+    dbCollection = process.env.DB_NAME;
   }
 
   await browser.close();
-
-  await addFilteredDocuments("artist", result, dbCollection);
+  // console.log(result);
+  // await addFilteredDocuments("artist", result, dbCollection);
 
   return {
     statusCode: 200,

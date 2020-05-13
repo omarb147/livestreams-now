@@ -6,6 +6,9 @@
   "engines": {
     "node": "10.18.1"
   },
+  "_moduleAliases": {
+    "@common-module": "lambda-layers/common-module"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "firebase-admin": "^8.12.1",
+    "module-alias": "^2.2.2",
     "serverless-dotenv-plugin": "^2.4.2",
     "uuid": "^8.0.0"
   },

@@ -1,4 +1,6 @@
-const middy = require("/opt/middy-wrapper");
+require("module-alias/register");
+const paths = require("../utils/pathVars");
+const middy = require(`${paths.COMMON_MODULE_LAYER_PATH}middy-wrapper`);
 const headers = require("../utils/headers");
 const firebaseRef = require("../firebase/firebase-db");
 
