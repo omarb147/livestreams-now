@@ -11,7 +11,7 @@ provider:
   runtime: nodejs10.x
   environment:
     NODE_PATH: "./:/opt/node_modules"
-    DB_NAME: ${env:DB_PREFIX}-${self:provider.stage}
+    DB_NAME: gs-livestreams-${self:provider.stage}
 
 plugins:
   - serverless-offline
