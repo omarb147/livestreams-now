@@ -1,4 +1,4 @@
-service: scrapper-lambda
+service: livestreams-now-backend
 
 custom:
   userStage: ${env:STACK_NAME}
@@ -11,33 +11,19 @@ provider:
   runtime: nodejs10.x
   environment:
     NODE_PATH: "./:/opt/node_modules"
+    DB_NAME: ${env:DB_PREFIX}-${self:provider.stage}
 
 plugins:
   - serverless-offline
   - serverless-dotenv-plugin
 
-layers:
-  chromeModule:
-    path: lambda-layers/chrome-layer
-    description: "chrome browser module for lambdas"
-    compatibleRuntimes:
-      - nodejs10.x
-    package:
-      include:
-        - node_modules/**
-  commonModule:
-    path: lambda-layers/common-module
-    description: "contains all common libraries and middleware for lambdas"
-    compatibleRuntimes:
-      - nodejs10.x
-    package:
-      include:
-        - node_modules/**
-
 package:
   exclude:
     - node_modules/puppeteer/.local-chromium/**
     - lambda-layers/**
+  include:
+    - ./functions/**/*
+  individually: true
 
 functions:
   get-livestreams-function:
@@ -51,7 +37,7 @@ functions:
           path: /livestreams
           method: get
     layers:
-      - { Ref: CommonModuleLambdaLayer }
+      - ${cf:livestreams-now-backend-layers-dev.CommonModuleLambdaLayerQualifiedArn }
   scraper-function:
     memorySize: 2536
     timeout: 30
@@ -64,5 +50,5 @@ functions:
           method: get
           cors: true
     layers:
-      - { Ref: CommonModuleLambdaLayer }
-      - { Ref: ChromeModuleLambdaLayer }
+      - ${cf:livestreams-now-backend-layers-dev.CommonModuleLambdaLayerQualifiedArn }
+      - ${cf:livestreams-now-backend-layers-dev.ChromeModuleLambdaLayerQualifiedArn }

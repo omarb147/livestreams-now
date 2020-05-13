@@ -1,0 +1,36 @@
+service: livestreams-now-backend-layers
+
+provider:
+  name: aws
+  region: eu-west-2
+
+package:
+  include:
+    - node_modules/**
+  individually: true
+
+layers:
+  chromeModule:
+    path: chrome-layer
+    description: "chrome browser module for lambdas"
+    compatibleRuntimes:
+      - nodejs10.x
+
+  commonModule:
+    path: common-layer
+    description: "contains all common libraries and middleware for lambdas"
+    compatibleRuntimes:
+      - nodejs10.x
+
+resources:
+  Outputs:
+    ChromeModuleLayerExport:
+      Value:
+        Ref: ChromeModuleLambdaLayer
+      Export:
+        Name: ChromeModuleLambdaLayer
+    CommonModuleLayerExport:
+      Value:
+        Ref: CommonModuleLambdaLayer
+      Export:
+        Name: CommonModuleLambdaLayer
