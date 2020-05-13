@@ -36,14 +36,12 @@ const main = async (event) => {
     dbCollection = process.env.DB_NAME;
   }
 
-  await browser.close();
-  // console.log(result);
-  // await addFilteredDocuments("artist", result, dbCollection);
+  await addFilteredDocuments("artist", result, dbCollection);
 
   return {
     statusCode: 200,
     headers,
-    body: JSON.stringify(result),
+    body: JSON.stringify({ result }),
   };
 };
 
