@@ -14,7 +14,7 @@ const getAllDataFromCollection = async (collection) => {
   const data = [];
   try {
     const snapshot = await db.collection(collection).get();
-    snapshot.forEach((doc) => data.push(doc.data()));
+    snapshot.forEach((doc) => data.push({ ...doc.data(), id: doc.id }));
     return data;
   } catch (error) {
     return error;

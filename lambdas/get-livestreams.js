@@ -3,8 +3,9 @@ const headers = require("../utils/headers");
 const firebaseRef = require("../firebase/firebase-db");
 
 const main = async (event) => {
-  const collection = event.queryStringParameters.collectionName;
-  const dbData = await firebaseRef.getAllDataFromCollection(collection);
+  const dbData = await firebaseRef.getAllDataFromCollection(
+    process.env.DB_NAME
+  );
   return {
     statusCode: 200,
     headers,
