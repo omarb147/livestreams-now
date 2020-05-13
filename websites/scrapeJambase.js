@@ -11,7 +11,6 @@ function scrapeLivestreams($) {
       .end()
       .text()
       .trim();
-    results.push(date);
 
     $(section)
       .find("[id*='list-post']")
