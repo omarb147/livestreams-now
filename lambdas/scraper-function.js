@@ -29,15 +29,13 @@ const main = async (event) => {
   if (targetUrl.includes("ticketmaster.co.uk")) {
     // TODO: function which takes the browser as an input to do whatever
     result = await getTicketMasterData(browser, targetUrl);
-    dbCollection = process.env.DB_NAME;
   } else if (targetUrl.includes("jambase.com")) {
     // TODO : function which takes the browser as an input to do whatever
     result = await getJambaseData(browser, targetUrl);
-    dbCollection = process.env.DB_NAME;
   }
 
   browser.close();
-  savedData = await addFilteredDocuments("title", result, dbCollection);
+  savedData = await addFilteredDocuments("title", result, process.env.DB_NAME);
 
   return {
     statusCode: 200,

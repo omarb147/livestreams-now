@@ -2,54 +2,34 @@ module.exports = async (browser, targetURL) => {
   const page = await browser.newPage();
   await page.goto(targetURL);
   await page.waitForSelector("h4");
+  await page.addScriptTag({
+    url: "https://code.jquery.com/jquery-3.2.1.min.js",
+  });
 
   let ticketMasterStreams = await page.evaluate(() => {
-    function getStreamTime(validatedLiveStream, liveStream) {
-      const startOfTime = validatedLiveStream.lastIndexOf("<br") - 5;
-      const endOfTime = validatedLiveStream.lastIndexOf("<br");
-      const liveStreamTime = validatedLiveStream.slice(startOfTime, endOfTime);
-      if (parseInt(liveStreamTime)) {
-        liveStream.time = liveStreamTime;
-      }
-    }
+    const $ = window.$; //otherwise the transpiler will rename it and won't work
+    const data = [];
+    $("h4").each((index, dateElement) => {
+      const dateValue = $(dateElement).text().trim();
 
-    function getArtistName(validatedLiveStream, liveStream) {
-      const startOfArtistName = validatedLiveStream.indexOf("/strong>") + 8;
-      const endOfArtistName = validatedLiveStream.indexOf("<br");
-      const artist = validatedLiveStream.slice(
-        startOfArtistName,
-        endOfArtistName
-      );
-      liveStream.artist = artist;
-    }
+      $(dateElement)
+        .nextUntil("h4")
+        .filter("p")
+        .each((index, livestream) => {
+          $(livestream).find("strong").remove();
+          if ($(livestream).text() !== "") {
+            const rawData = $(livestream).text().split("\n");
+            const title = rawData[0];
+            const time = rawData[1];
+            const platform = rawData[3] !== "More Info" ? rawData[3] : "";
+            const livestreamUrl = $(livestream).find("a").attr("href");
 
-    function getStreamLink(validatedLiveStream, liveStream) {
-      const startOfLink = validatedLiveStream.indexOf('a href="') + 8;
-      const endOfLink = validatedLiveStream.indexOf('target="') - 2;
-      const liveStreamLink = validatedLiveStream.slice(startOfLink, endOfLink);
-      liveStream.linkToStream = liveStreamLink;
-    }
-
-    const liveStreams = [];
-    const liveStreamEvents = Array.from(document.querySelectorAll("p"));
-    const liveStreamsOuterHTML = liveStreamEvents.map((liveStreamElement) => {
-      return liveStreamElement.outerHTML;
-    });
-    let validatedLiveStreams = liveStreamsOuterHTML.filter((liveStream) => {
-      const regexTest = /<strong>/;
-      if (liveStream.includes("Artist:")) {
-        return regexTest.test(liveStream);
-      }
+            data.push({ title, time, platform, dateValue, livestreamUrl });
+          }
+        });
     });
 
-    validatedLiveStreams.forEach((validatedLiveStream) => {
-      let liveStream = { artist: "", time: "", linkToStream: "" };
-      getStreamTime(validatedLiveStream, liveStream);
-      getArtistName(validatedLiveStream, liveStream);
-      getStreamLink(validatedLiveStream, liveStream);
-      liveStreams.push(liveStream);
-    });
-    return liveStreams;
+    return data;
   });
   return ticketMasterStreams;
 };
