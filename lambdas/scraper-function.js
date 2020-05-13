@@ -36,8 +36,8 @@ const main = async (event) => {
     dbCollection = process.env.DB_NAME;
   }
 
-  await addFilteredDocuments("artist", result, dbCollection);
   browser.close();
+  await addFilteredDocuments("artist", result, dbCollection);
 
   return {
     statusCode: 200,
