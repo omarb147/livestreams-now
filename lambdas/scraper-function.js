@@ -37,6 +37,7 @@ const main = async (event) => {
   }
 
   await addFilteredDocuments("artist", result, dbCollection);
+  browser.close();
 
   return {
     statusCode: 200,
